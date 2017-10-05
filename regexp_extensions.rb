@@ -1,4 +1,10 @@
-load "string_extensions.rb"
+# Load required extension scripts
+# begin
+#   require "string_extensions.rb"
+# rescue
+#   # recover by using path of current script as search path
+#   require File.join(File.dirname(__FILE__),"string_extensions.rb")
+# end
 
 class Regexp
 
@@ -44,4 +50,40 @@ class Regexp
 
     matches
   end
+
+  ##
+  # Returns array of all items matching regex in source string
+  # @param [String] string The string to search
+  # @param [Hash] options Optional arguments
+  # @option options [Boolean] :index If true, result is hash with match positions as keys
+  # @return [Array|Hash] Array or Hash of all matches, L-R order
+  # @see match
+  # @example
+  #   /[a-c]+/.match_multiple("12abbc3bca4") => ["abbc", "bca"]
+  # @example
+  #   /[a-c]+/.match_multiple("12abbc3bca4",index: true) => 
+  #       {2 => "abbc", 7 => "bca"}
+  def match_multiple(string, options={})
+    use_index = options.fetch(:index, false)
+    matches=(use_index)? {} : []
+    src_string=string.dup
+    last_match=-1
+    while !last_match.nil? do
+      last_match = self.match(src_string)
+      if !last_match.nil?
+        match = last_match[0]
+        if use_index
+          index = string.index(match)
+          matches[index] = match
+        else
+          matches.push(match)
+        end
+        src_string = src_string.gsub(match,"")
+      end
+    end
+    matches
+  end
+
+
+
 end

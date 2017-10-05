@@ -13,4 +13,18 @@ class String
       ((position == :after)? fixture : "")
     value
   end
+
+  ##
+  # Execute gsub multiple times
+  # @param [Array] replacements Array of gsub params [[match, replace], ...]
+  # @return [String] String after gsub operations are performed
+  # @see gsub
+  #
+  def gsubs(replacements)
+    str = self.dup
+    replacements.each do |r|
+      str = str.gsub(r[0],r[1])
+    end
+    str
+  end
 end

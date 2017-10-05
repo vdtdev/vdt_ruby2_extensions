@@ -40,4 +40,19 @@ class Array
         return value
     end
 
+    ##
+    # Build hash using array values and ordered key list
+    # @param [Array] keys Ordered array of keys to use
+    # @return [Hash] Hash constructed of array values and keys
+    # @example
+    #   [1,2,3].to_hash([:red,:green,:blue]) 
+    #   => {red: 1, green: 2, blue: 3}
+    def to_hash(keys)
+        hash={}
+        self.each_with_index do |v,i|
+            hash[keys[i]]=v
+        end
+        return hash
+    end
+
 end
